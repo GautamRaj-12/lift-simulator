@@ -37,6 +37,7 @@ function createFloors(floorInputValue) {
 }
 
 okBtn.addEventListener("click", () => {
+  liftSimulationBox.innerHTML = "";
   floorInputValue = floorInput.value;
   liftInputValue = liftInput.value;
   console.log(floorInputValue, liftInputValue);
