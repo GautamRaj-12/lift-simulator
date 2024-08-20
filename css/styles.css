@@ -2,53 +2,83 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: cursive;
-    background-color: #9c9ccf;
+    font-family:sans-serif;
+    background-color: #f0f0f5;
 }
 input{
-    width: 30px;
+    width: 40px;
     text-align: center;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
-button{
-    width:30px;
-    background-color: #101014;
+.ok-btn{
+    width:50px;
+    background-color: #333;
     outline: none;
-    color: #F2F2F7;
+    color: #fff;
     border:none;
-    padding: 2px;
+    border-radius: 4px;
+    font-size: 14px;
+    padding: 5px;
     text-align: center;
     cursor: pointer;
     transition:all 0.3s ease-in;
 }
-button:hover{
-    background-color: #F2F2F7;
-    color: #101014;
-    border: 1px solid #101014;
+.ok-btn:hover{
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #333;
 }
 .floor-lift-input{
     display: flex;
     justify-content: center;
-    gap:10px;
-    padding:2px;
+    gap:15px;
+    padding:10px;
+    margin-bottom: 20px;
 }
 .lift-simulation{
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     align-items: center;
     max-width: 300px;
     margin: 30px auto;
-    border: 1px solid #F2F2F7;
+    border: 2px solid #ccc;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    overflow: hidden;
     position: relative;
 }
-.floor-box{
+.floor-box {
     height: 120px;
-    width: 300px;
-    border-bottom: 2px solid #101014;
+    width: 100%;
+    border-bottom: 2px solid #333;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
 }
-.lift-box{
-    width: 50px;
-    height: 60px;
-    position:absolute;
-    bottom: 2px;
-    background: #e8c607;
+.button-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.lift-button {
+    border: none;
+    color: #fff;
+    padding: 6px 10px;
+    margin: 5px 0;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.up-button {
+    background-color: #1dc917;
+    font-weight: 600;
+}
+
+.down-button {
+    background-color: #f33e41;
+    font-weight: 600;
 }
