@@ -39,9 +39,10 @@ input{
 }
 .lift-simulation{
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     align-items: center;
-    max-width: 300px;
+    max-width: 900px;
+    padding: 2px;
     margin: 30px auto;
     border: 2px solid #ccc;
     background-color: #f8f8f8;
@@ -81,4 +82,22 @@ input{
 .down-button {
     background-color: #f33e41;
     font-weight: 600;
+}
+.floor-1{
+    position:relative;
+}
+.lift-container{
+    position: absolute;
+    left:65px;
+    width: 80%;
+    height: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.lift-box{
+    height: 60px;
+    width: 50px;
+    gap:30px;
+    background-color:#6636eb;
 }
