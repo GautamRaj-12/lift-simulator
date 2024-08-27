@@ -19,14 +19,24 @@ function createFloors(floorInputValue) {
     if (i < floorInputValue) {
       let upButton = document.createElement("button");
       upButton.textContent = "Up";
-      upButton.classList.add("lift-button", "up-button");
+      upButton.classList.add(
+        "lift-button",
+        `lift-button-${i}`,
+        "up-button",
+        `up-button-${i}`
+      );
       buttonContainer.appendChild(upButton);
     }
 
     if (i > 1) {
       let downButton = document.createElement("button");
       downButton.textContent = "Down";
-      downButton.classList.add("lift-button", "down-button");
+      downButton.classList.add(
+        "lift-button",
+        `lift-button-${i}`,
+        "down-button",
+        `down-button-${i}`
+      );
       buttonContainer.appendChild(downButton);
     }
 
