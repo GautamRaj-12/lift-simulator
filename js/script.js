@@ -59,6 +59,16 @@ function createLifts(liftInputValue) {
     let liftBox = document.createElement("div");
     liftBox.classList.add("lift-box");
     liftBox.dataset.currentFloor = 1; // Starting on the 1st floor
+
+    let leftDoor = document.createElement("div");
+    leftDoor.classList.add("left-door");
+
+    let rightDoor = document.createElement("div");
+    rightDoor.classList.add("right-door");
+
+    liftBox.appendChild(leftDoor);
+    liftBox.appendChild(rightDoor);
+
     liftContainer.appendChild(liftBox);
     lifts.push(liftBox);
   }

@@ -99,5 +99,18 @@ input{
     height: 60px;
     width: 50px;
     gap:30px;
+    display: flex;
+    justify-content: space-between;
+    gap:0;
     background-color:#6636eb;
+}
+.left-door,.right-door{
+    height:100%;
+    width: 50%;
+}
+.left-door{
+    background-color: rgb(236, 102, 102);
+}
+.right-door{
+    background-color: rgb(78, 238, 78);
 }
