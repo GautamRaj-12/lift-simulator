@@ -39,7 +39,7 @@ function createFloors(floorInputValue) {
         "down-button",
         `down-button-${i}`
       );
-      downButton.addEventListener("click", () => requestLift(i, "down"));
+      downButton.addEventListener("click", () => requestLift(i));
       buttonContainer.appendChild(downButton);
     }
 
@@ -65,7 +65,6 @@ function createLifts(liftInputValue) {
 
     let rightDoor = document.createElement("div");
     rightDoor.classList.add("right-door");
-
     liftBox.appendChild(leftDoor);
     liftBox.appendChild(rightDoor);
 
@@ -74,7 +73,7 @@ function createLifts(liftInputValue) {
   }
 }
 
-function requestLift(floor, direction) {
+function requestLift(floor) {
   const availableLift = findNearestAvailableLift(floor);
   if (availableLift) {
     moveLift(availableLift, floor);
@@ -106,13 +105,47 @@ function moveLift(lift, targetFloor) {
 
   lift.dataset.isMoving = "true";
 
+  // Move the lift
   lift.style.transition = `transform ${travelTime}s ease-in-out`;
   lift.style.transform = `translateY(-${120 * (targetFloor - 1)}px)`;
 
+  // Open doors on reaching the floor
   setTimeout(() => {
     lift.dataset.currentFloor = targetFloor;
-    lift.dataset.isMoving = "false";
+    openDoors(lift, 2.5); // Open doors in 2.5 seconds
   }, travelTime * 1000);
+
+  // Close doors after a delay
+}
+
+function openDoors(lift, duration) {
+  const leftDoor = lift.querySelector(".left-door");
+  const rightDoor = lift.querySelector(".right-door");
+
+  leftDoor.style.transition = `transform ${duration}s ease-in-out`;
+  leftDoor.style.transform = `translateX(-100%)`;
+
+  rightDoor.style.transition = `transform ${duration}s ease-in-out`;
+  rightDoor.style.transform = `translateX(100%)`;
+
+  setTimeout(() => {
+    closeDoors(lift, 2.5); // Close doors after 2.5 seconds
+  }, duration * 1000);
+}
+
+function closeDoors(lift, duration) {
+  const leftDoor = lift.querySelector(".left-door");
+  const rightDoor = lift.querySelector(".right-door");
+
+  leftDoor.style.transition = `transform ${duration}s ease-in-out`;
+  leftDoor.style.transform = `translateX(0)`;
+
+  rightDoor.style.transition = `transform ${duration}s ease-in-out`;
+  rightDoor.style.transform = `translateX(0)`;
+
+  setTimeout(() => {
+    lift.dataset.isMoving = "false";
+  }, duration * 1000);
 }
 
 okBtn.addEventListener("click", () => {
