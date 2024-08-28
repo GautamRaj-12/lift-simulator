@@ -157,6 +157,20 @@ okBtn.addEventListener("click", () => {
   requestQueue = []; // Reset request queue
   floorInputValue = floorInput.value;
   liftInputValue = liftInput.value;
+
+  // Check for negative numbers or non-numeric input
+  if (
+    isNaN(floorInputValue) ||
+    isNaN(liftInputValue) ||
+    floorInputValue <= 0 ||
+    liftInputValue <= 0
+  ) {
+    alert("Please enter positive numbers only!");
+    floorInput.value = "";
+    liftInput.value = "";
+    return;
+  }
+
   console.log(floorInputValue, liftInputValue);
 
   createFloors(Number(floorInputValue));
