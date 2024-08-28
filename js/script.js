@@ -7,13 +7,13 @@ let liftInputValue;
 
 let liftSimulationBox = document.querySelector(".lift-simulation");
 let lifts = [];
+let requestQueue = []; // Queue to store pending lift requests
 
 function createFloors(floorInputValue) {
   for (let i = floorInputValue; i >= 1; i--) {
     let floorBox = document.createElement("div");
     floorBox.classList.add(`floor-box`, `floor-${i}`);
 
-    // Create button container on each floor
     let buttonContainer = document.createElement("div");
     buttonContainer.classList.add("button-container");
 
@@ -44,13 +44,11 @@ function createFloors(floorInputValue) {
     }
 
     floorBox.appendChild(buttonContainer);
-
     liftSimulationBox.appendChild(floorBox);
   }
 }
 
 function createLifts(liftInputValue) {
-  // Create lift container on 1st floor
   let liftContainer = document.createElement("div");
   liftContainer.classList.add("lift-container");
   document.querySelector(".floor-1").appendChild(liftContainer);
@@ -59,6 +57,7 @@ function createLifts(liftInputValue) {
     let liftBox = document.createElement("div");
     liftBox.classList.add("lift-box");
     liftBox.dataset.currentFloor = 1; // Starting on the 1st floor
+    liftBox.dataset.isMoving = "false"; // Lift is initially free
 
     let leftDoor = document.createElement("div");
     leftDoor.classList.add("left-door");
@@ -77,6 +76,9 @@ function requestLift(floor) {
   const availableLift = findNearestAvailableLift(floor);
   if (availableLift) {
     moveLift(availableLift, floor);
+  } else {
+    // If no lift is available, add the request to the queue
+    requestQueue.push(floor);
   }
 }
 
@@ -105,17 +107,13 @@ function moveLift(lift, targetFloor) {
 
   lift.dataset.isMoving = "true";
 
-  // Move the lift
   lift.style.transition = `transform ${travelTime}s ease-in-out`;
   lift.style.transform = `translateY(-${120 * (targetFloor - 1)}px)`;
 
-  // Open doors on reaching the floor
   setTimeout(() => {
     lift.dataset.currentFloor = targetFloor;
     openDoors(lift, 2.5); // Open doors in 2.5 seconds
   }, travelTime * 1000);
-
-  // Close doors after a delay
 }
 
 function openDoors(lift, duration) {
@@ -145,12 +143,18 @@ function closeDoors(lift, duration) {
 
   setTimeout(() => {
     lift.dataset.isMoving = "false";
+    // Check the queue for any pending requests
+    if (requestQueue.length > 0) {
+      const nextFloor = requestQueue.shift(); // Get the next request
+      moveLift(lift, nextFloor); // Move the lift to the next floor
+    }
   }, duration * 1000);
 }
 
 okBtn.addEventListener("click", () => {
   liftSimulationBox.innerHTML = "";
   lifts = []; // Reset lifts array
+  requestQueue = []; // Reset request queue
   floorInputValue = floorInput.value;
   liftInputValue = liftInput.value;
   console.log(floorInputValue, liftInputValue);
