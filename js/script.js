@@ -9,6 +9,9 @@ let liftSimulationBox = document.querySelector(".lift-simulation");
 let lifts = [];
 let requestQueue = []; // Queue to store pending lift requests
 
+// Track assigned lifts for each direction on each floor
+let assignedLifts = {};
+
 function createFloors(floorInputValue) {
   for (let i = floorInputValue; i >= 1; i--) {
     let floorBox = document.createElement("div");
@@ -39,7 +42,7 @@ function createFloors(floorInputValue) {
         "down-button",
         `down-button-${i}`
       );
-      downButton.addEventListener("click", () => requestLift(i));
+      downButton.addEventListener("click", () => requestLift(i, "down"));
       buttonContainer.appendChild(downButton);
     }
 
@@ -72,13 +75,20 @@ function createLifts(liftInputValue) {
   }
 }
 
-function requestLift(floor) {
+function requestLift(floor, direction) {
+  // Check if a lift is already assigned for the given direction on this floor
+  if (assignedLifts[`${floor}-${direction}`]) {
+    return; // If a lift is already assigned, do nothing
+  }
+
   const availableLift = findNearestAvailableLift(floor);
   if (availableLift) {
-    moveLift(availableLift, floor);
+    // Mark the lift as assigned for this direction and floor
+    assignedLifts[`${floor}-${direction}`] = availableLift;
+    moveLift(availableLift, floor, direction);
   } else {
     // If no lift is available, add the request to the queue
-    requestQueue.push(floor);
+    requestQueue.push({ floor, direction });
   }
 }
 
@@ -100,7 +110,7 @@ function findNearestAvailableLift(requestedFloor) {
   return nearestLift;
 }
 
-function moveLift(lift, targetFloor) {
+function moveLift(lift, targetFloor, direction) {
   const currentFloor = parseInt(lift.dataset.currentFloor);
   const distance = Math.abs(targetFloor - currentFloor);
   const travelTime = distance * 2; // 2 seconds per floor
@@ -112,11 +122,11 @@ function moveLift(lift, targetFloor) {
 
   setTimeout(() => {
     lift.dataset.currentFloor = targetFloor;
-    openDoors(lift, 2.5); // Open doors in 2.5 seconds
+    openDoors(lift, 2.5, direction); // Open doors in 2.5 seconds
   }, travelTime * 1000);
 }
 
-function openDoors(lift, duration) {
+function openDoors(lift, duration, direction) {
   const leftDoor = lift.querySelector(".left-door");
   const rightDoor = lift.querySelector(".right-door");
 
@@ -127,11 +137,11 @@ function openDoors(lift, duration) {
   rightDoor.style.transform = `translateX(100%)`;
 
   setTimeout(() => {
-    closeDoors(lift, 2.5); // Close doors after 2.5 seconds
+    closeDoors(lift, 2.5, direction); // Close doors after 2.5 seconds
   }, duration * 1000);
 }
 
-function closeDoors(lift, duration) {
+function closeDoors(lift, duration, direction) {
   const leftDoor = lift.querySelector(".left-door");
   const rightDoor = lift.querySelector(".right-door");
 
@@ -143,10 +153,14 @@ function closeDoors(lift, duration) {
 
   setTimeout(() => {
     lift.dataset.isMoving = "false";
+    // Clear the assigned lift from the record
+    const currentFloor = lift.dataset.currentFloor;
+    delete assignedLifts[`${currentFloor}-${direction}`];
+
     // Check the queue for any pending requests
     if (requestQueue.length > 0) {
-      const nextFloor = requestQueue.shift(); // Get the next request
-      moveLift(lift, nextFloor); // Move the lift to the next floor
+      const nextRequest = requestQueue.shift(); // Get the next request
+      moveLift(lift, nextRequest.floor, nextRequest.direction); // Move the lift to the next floor
     }
   }, duration * 1000);
 }
@@ -155,6 +169,7 @@ okBtn.addEventListener("click", () => {
   liftSimulationBox.innerHTML = "";
   lifts = []; // Reset lifts array
   requestQueue = []; // Reset request queue
+  assignedLifts = {}; // Reset assigned lifts
   floorInputValue = floorInput.value;
   liftInputValue = liftInput.value;
 
