@@ -177,10 +177,10 @@ okBtn.addEventListener("click", () => {
   if (
     isNaN(floorInputValue) ||
     isNaN(liftInputValue) ||
-    floorInputValue <= 0 ||
-    liftInputValue <= 0
+    floorInputValue < 2 ||
+    liftInputValue < 0
   ) {
-    alert("Please enter positive numbers only!");
+    alert("Values must be positive and number of floors must be more than 1");
     floorInput.value = "";
     liftInput.value = "";
     return;
