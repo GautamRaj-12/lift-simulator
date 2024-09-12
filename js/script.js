@@ -188,6 +188,29 @@ okBtn.addEventListener("click", () => {
 
   console.log(floorInputValue, liftInputValue);
 
+  window.addEventListener("resize", function () {
+    // Code to set width and margin based on screen size
+    if (window.innerWidth <= 768) {
+      liftSimulationBox.style.width = `${Math.max(
+        liftInputValue * 60 + liftInputValue * 10 + 100,
+        360
+      )}px`;
+      liftSimulationBox.style.margin = `0 auto`;
+    } else if (window.innerWidth <= 992) {
+      liftSimulationBox.style.width = `${Math.max(
+        liftInputValue * 60 + liftInputValue * 10 + 100,
+        600
+      )}px`;
+      liftSimulationBox.style.margin = `0 auto`;
+    } else {
+      liftSimulationBox.style.width = `${Math.max(
+        liftInputValue * 60 + liftInputValue * 10 + 100,
+        900
+      )}px`;
+      liftSimulationBox.style.margin = `0 auto`;
+    }
+  });
+
   createFloors(Number(floorInputValue));
   createLifts(Number(liftInputValue));
 });
